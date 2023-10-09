@@ -10,7 +10,6 @@ class Installer
      * Install framework.
      */
     public function install(){
-
         // download the template
         if (!file_exists(ABSPATH . '/src')){
 
@@ -59,15 +58,19 @@ class Installer
             // download composer
             file_put_contents(ABSPATH . '/composer.phar', file_get_contents('https://getcomposer.org/composer.phar'));
 
-            // run composer install
-            shell_exec('php ' . ABSPATH . '/composer.phar install --no-interaction --working-dir=' . ABSPATH);
+            // run composer
+            include __DIR__ . '/composer-extract.php';
 
             // remove composer.phar
             unlink(ABSPATH . '/composer.phar');
+
+            // remove extractedComposer
+            $this->rrmdir(ABSPATH . '/extractedComposer');
         }
 
         //redirect to wp-admin
         wp_redirect(admin_url());
+        exit();
     }
 
     /**
